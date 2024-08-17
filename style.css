@@ -1,0 +1,53 @@
+
+#mainForm {
+    background-color: #fff;
+    border-radius: 10px;
+    inline-size: 100%;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border: 2px solid rgb(117, 94, 94);
+    display: none;
+}
+
+.btn {
+    display: block;
+    inline-size: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+#newBook {
+    margin-block-start: 15px;
+}
+
+.btn-primary, .btn-secondary {
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #574141;
+}
+
+.btn-primary:hover {
+    background-color: #46424b;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary:hover {
+    background-color: #5050f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.form-control, .form-check-input {
+    padding: 0.75rem;
+}
+
+.form-check-label {
+    margin-inline-start: 0.5rem;
+}
