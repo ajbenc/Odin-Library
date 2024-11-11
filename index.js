@@ -1,120 +1,126 @@
-//logic for the newBook btn
-
+// Selectors for elements
 const newBookBtn = document.querySelector("#newBook");
-
-newBookBtn.addEventListener("click", function () {
 const formDisplay = document.querySelector("#mainForm");
-formDisplay.style.display = "block";
+const libraryBook = document.querySelector("#bookCards");
+
+// Toggle form visibility
+newBookBtn.addEventListener("click", () => {
+  formDisplay.style.display = formDisplay.style.display === "block" ? "none" : "block";
 });
 
-newBookBtn.addEventListener("dblclick", function () {
-const formDisplay = document.querySelector("#mainForm");
-formDisplay.style.display = "none";
-});
-
-//Create a library array to store the book objects
+// Create library array to store books
 const myLibrary = [];
 
-//Constructor function for daBook
-
+// Constructor function for daBook
 class daBook {
-    constructor (title, autor, pages, read) {
+  constructor(title, autor, pages, read) {
     this.autor = autor;
     this.title = title;
     this.pages = pages;
-    this.read  = read;
-    }      
-
+    this.read = read;
+  }
 }
 
-//looping function
-
+// Function to display books in the library
 function displayInfo() {
-    const libraryBook = document.querySelector("#bookCards");
-    libraryBook.innerHTML = ''; // Clear previous content
+  libraryBook.innerHTML = ''; // Clear previous content
 
-    myLibrary.forEach((book, i) => {
-        // Create the main book card element
-        let bookElement = document.createElement("div");
-        bookElement.classList.add("book-card");
+  myLibrary.forEach((book, i) => {
+    // Create book card structure
+    let bookElement = document.createElement("div");
+    bookElement.classList.add("book-card");
 
-        // Create the card header
-        let cardHeader = document.createElement("div");
-        cardHeader.classList.add("card-header");
+    let cardHeader = document.createElement("div");
+    cardHeader.classList.add("card-header");
 
-        let autorElement = document.createElement("h3");
-        autorElement.classList.add("autor");
-        autorElement.textContent = book.autor;
+    let titleElement = document.createElement("h5");
+    titleElement.classList.add("title");
+    titleElement.textContent = `made by ${book.title}`;
 
-        let titleElement = document.createElement("h5");
-        titleElement.classList.add("title");
-        titleElement.textContent = `made by ${book.title}`;
+    let autorElement = document.createElement("h3");
+    autorElement.classList.add("autor");
+    autorElement.textContent = book.autor;
 
-        cardHeader.appendChild(autorElement);
-        cardHeader.appendChild(titleElement);
+    cardHeader.appendChild(autorElement);
+    cardHeader.appendChild(titleElement);
 
-        // Create the card body
-        let cardBody = document.createElement("div");
-        cardBody.classList.add("card-body");
+    let cardBody = document.createElement("div");
+    cardBody.classList.add("card-body");
 
-        let pagesElement = document.createElement("p");
-        pagesElement.textContent = `${book.pages} pages`;
+    let pagesElement = document.createElement("p");
+    pagesElement.textContent = `${book.pages} pages`;
 
-        let readStatusElement = document.createElement("p");
-        readStatusElement.classList.add("read-status");
-        readStatusElement.textContent = book.read ? "Read" : "Not Read Yet";
+    let readStatusElement = document.createElement("p");
+    readStatusElement.classList.add("read-status");
+    readStatusElement.textContent = book.read ? "Read" : "Not Read Yet";
 
-        // Create the remove button
-        let removeBtn = document.createElement("button");
-        removeBtn.classList.add("remove-btn");
-        removeBtn.textContent = "Remove";
-        removeBtn.addEventListener("click", () => removeBook(i));
+    let removeBtn = document.createElement("button");
+    removeBtn.classList.add("remove-btn");
+    removeBtn.textContent = "Remove";
+    removeBtn.addEventListener("click", () => removeBook(i));
 
-        // Create the toggle read status button
-        let toggleReadBtn = document.createElement("button");
-        toggleReadBtn.classList.add("toggle-read-btn");
-        toggleReadBtn.textContent = "Toggle Read";
-        toggleReadBtn.addEventListener("click", () => toggleRead(i));
+    let toggleReadBtn = document.createElement("button");
+    toggleReadBtn.classList.add("toggle-read-btn");
+    toggleReadBtn.textContent = "Toggle Read";
+    toggleReadBtn.addEventListener("click", () => toggleRead(i));
 
-        cardBody.appendChild(pagesElement);
-        cardBody.appendChild(readStatusElement);
-        cardBody.appendChild(removeBtn);
-        cardBody.appendChild(toggleReadBtn);
+    cardBody.appendChild(pagesElement);
+    cardBody.appendChild(readStatusElement);
+    cardBody.appendChild(removeBtn);
+    cardBody.appendChild(toggleReadBtn);
 
-        // Append header and body to the book element
-        bookElement.appendChild(cardHeader);
-        bookElement.appendChild(cardBody);
+    bookElement.appendChild(cardHeader);
+    bookElement.appendChild(cardBody);
 
-        // Append the book element to the library container
-        libraryBook.appendChild(bookElement);
-    });
+    libraryBook.appendChild(bookElement);
+  });
 }
 
+// Add book to library function with validation
+function addBookToLibrary() {
+  const autor = document.querySelector("#bookAutor").value.trim();
+  const title = document.querySelector("#bookTitle").value.trim();
+  const pages = document.querySelector("#bookPages").value.trim();
+  const read = document.querySelector("#Read").checked;
 
-//Create a function to add a Book to the Library
-function addBookToLibrary () {
-let autor = document.querySelector("#bookAutor").value;
-let title = document.querySelector("#bookTitle").value;
-let pages = document.querySelector("#bookPages").value;
-let read = document.querySelector("#Read").checked;
-let addBook = new daBook(autor, title, pages, read);
-myLibrary.push(addBook);
-displayInfo();
+  // Validation for fields
+  if (!autor || !title || !pages) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  if (!/^[A-Za-z\s]+$/.test(autor) || !/^[A-Za-z\s]+$/.test(title)) {
+    alert("Author and title should contain only letters.");
+    return;
+  }
+
+  if (!/^\d+$/.test(pages)) {
+    alert("Pages should contain only numbers.");
+    return;
+  }
+
+  // Add book to library and display
+  const newBook = new daBook(title, autor, pages, read);
+  myLibrary.push(newBook);
+  displayInfo();
+  formDisplay.style.display = "none"; // Hide form after adding book
+  formDisplay.reset(); // Clear form fields
 }
 
+// Remove book function
 function removeBook(index) {
-    myLibrary.splice(index, 1);
-    displayInfo();
+  myLibrary.splice(index, 1);
+  displayInfo();
 }
 
-function toggleRead(index){
-    myLibrary[index].read = !myLibrary[index].read;
-    displayInfo();
+// Toggle read status function
+function toggleRead(index) {
+  myLibrary[index].read = !myLibrary[index].read;
+  displayInfo();
 }
 
-document.querySelector("#mainForm").addEventListener("submit", function (event){
-event.preventDefault();
-addBookToLibrary();
+// Event listener for form submission
+formDisplay.addEventListener("submit", function (event) {
+  event.preventDefault();
+  addBookToLibrary();
 });
-
-
